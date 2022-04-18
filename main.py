@@ -52,9 +52,14 @@ def train(args):
     target, features = data[args.y_col], data.drop([args.y_col], axis=1)
     X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.25,random_state=33)
 
-    ##### output test_set.csv #####
+    ##### output train_set.csv & test_set.csv #####
+    ## train
+    X_train[aegs.y_col] = y_train
+    X_train.to_csv('train_set.csv', index=False) 
+
+    ## test 
     X_test[args.y_col] = y_test
-    X_test.to_csv('val_set.csv',index=False)
+    X_test.to_csv('val_set.csv', index=False)
     X_test.drop([args.y_col], axis=1, inplace=True)
     #####
 
@@ -69,7 +74,7 @@ def train(args):
     
     
     normalLogger.debug('create preprocess from training data...')
-    preprocessor = preprocess( encoder=args.encoder, normalize=(args.algorithm=='nn') )
+    preprocessor = preprocess(encoder=args.encoder, normalize=(args.algorithm=='nn') )
     
     if args.algorithm == 'nn':
         # note: target is for target encoder and nn to get output class count.
